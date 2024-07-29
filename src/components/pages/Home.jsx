@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react'
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { useArticlesContext } from '../hooks/useArticlesContext';
 
 // API KEY
@@ -11,6 +12,8 @@ const Home = () => {
   const [category, setCategory] = useState('');
   // State for loading
   const [loading, setLoading] = useState(true)
+  // Initiate useNavigate
+  const navigate = useNavigate()
 
   // bring in state and dispatch
   const {articles, dispatch} = useArticlesContext()
@@ -35,7 +38,6 @@ const Home = () => {
     fetchArticles()
     // console.log("Country state is now " + country)
     // console.log("Category state is now " + category)
-    console.log(apiKey);
   }, [country, category]) 
 
   // handle country change
@@ -52,6 +54,11 @@ const Home = () => {
     setCategory(newCategory)
   }
 
+  const handleReadMoreClick = (index) => {
+    console.log(index);
+    navigate(`/article/${index}`)
+  }
+
   // mapped articles component
   const Articles = ({articles}) => {
     const mappedArticles = articles.map((article, index) => {
@@ -60,6 +67,7 @@ const Home = () => {
         <div key={index} className='article'>
           <h2>{article.title}</h2>
           <p>{article.description}</p>
+          <button onClick={() => handleReadMoreClick(index)}>Read More</button>
         </div>
       )
     })
